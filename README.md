@@ -1,6 +1,6 @@
 # Prompt Grid Handoff Package
 
-**Current plugin version:** 0.1.1
+**Current plugin version:** 0.2.0
 
 This package defines a two-stage Obsidian plugin build for composing and exporting StudioRich music prompts.
 
@@ -48,3 +48,13 @@ Prompt Grid keeps Suno's **Style** and **Prompt** fields separate:
 New imports use the **Prepend [Instrumental] on prompt export** setting, which defaults on. Canonical notes store the choice as `instrumental: true` or `instrumental: false`; this per-note value overrides the setting. Existing canonical notes without the field use the current setting and remain readable.
 
 Spec 1.1 does not add the Visual Composer, a custom view, drag-and-drop, or card UI.
+
+## Visual Composer
+
+Open a canonical Prompt Grid note and run **Prompt Grid: Open Visual Composer**. The native Obsidian view provides editable title, Style, BPM, key, and instrumental metadata above a horizontally scrolling grid. Preamble is the fixed first column and each prompt section appears as a separate column.
+
+- Add, rename, move, drag, or delete sections.
+- Add, edit, enable/disable, move, drag between sections, or delete prompt cards.
+- Copy the separate Suno Style and structured Prompt outputs from the toolbar.
+- Every confirmed change is immediately serialized to the open canonical Markdown note; no secondary database is created.
+- Changing the active note or modifying its Markdown externally refreshes the composer.
