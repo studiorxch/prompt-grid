@@ -1,0 +1,2 @@
+export function slugify(value:string):string { return value.normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"prompt"; }
+export function titleFromName(value:string):string { const base=value.replace(/\.[^.]+$/,"").replace(/^(?:raw|expected-canonical|expected-suno):\d+_/i,""); return base.split(/[-_]+/).filter(Boolean).map(w=>w[0]!.toUpperCase()+w.slice(1)).join(" ")||"Untitled Prompt"; }

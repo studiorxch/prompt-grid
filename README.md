@@ -1,5 +1,7 @@
 # Prompt Grid Handoff Package
 
+**Current plugin version:** 0.2.2
+
 This package defines a two-stage Obsidian plugin build for composing and exporting StudioRich music prompts.
 
 ## Build Order
@@ -34,3 +36,31 @@ PROMPTGRID-HANDOFF/
 ## First Assignment
 
 Build Spec 1 only. Run automated tests against all fixture pairs. The implementation is incomplete until each raw fixture produces its matching canonical and Suno output.
+
+## Spec 1.1 Export Behavior
+
+Prompt Grid keeps Suno's **Style** and **Prompt** fields separate:
+
+- **Prompt Grid: Copy Style for Suno** copies styles as plain comma-separated text, without brackets or a `Styles:` prefix.
+- **Prompt Grid: Copy current note for Suno** copies only the structured bracketed prompt body. Style, BPM, and key metadata are excluded.
+- **Prompt Grid: Export current note for Suno** writes that same structured bracketed prompt body to the configured Exports folder.
+
+New imports use the **Prepend [Instrumental] on prompt export** setting, which defaults on. Canonical notes store the choice as `instrumental: true` or `instrumental: false`; this per-note value overrides the setting. Existing canonical notes without the field use the current setting and remain readable.
+
+Spec 1.1 does not add the Visual Composer, a custom view, drag-and-drop, or card UI.
+
+## Visual Composer
+
+Open a canonical Prompt Grid note and run **Prompt Grid: Open Visual Composer**. The native Obsidian view provides editable title, Style, BPM, key, and instrumental metadata above a horizontally scrolling grid. Preamble appears as the first column when it contains cards, and each prompt section appears as a separate column.
+
+- Add, rename, move, drag, or delete sections.
+- Add, edit, enable/disable, move, drag between sections, or delete prompt cards.
+- Copy the separate Suno Style and structured Prompt outputs from the toolbar.
+- Every confirmed change is immediately serialized to the open canonical Markdown note; no secondary database is created.
+- Changing the active note or modifying its Markdown externally refreshes the composer.
+
+### Compact interaction model
+
+Sections and cards use a dense Kanban-style layout. Drag sections from the muted `⠿` header handle and drag cards from their body. Section rename/movement/deletion and card movement/enablement/deletion live in keyboard-accessible `…` menus. Double-click card text, or focus it and press Enter, to open multiline editing; use Ctrl/Cmd+Enter to commit or Escape to cancel.
+
+In version 0.2.2, cards are draggable from their body and show exact insertion positions while moving; text selection, editing, and overflow menus do not start drags. Empty Preamble is hidden until **Add preamble** is selected from the board menu. Columns can be collapsed individually or through **Collapse all**/**Expand all**, with collapse state stored only in the Obsidian workspace. Card editing stays in the card text region, commits on blur or Ctrl/Cmd+Enter, and cancels with Escape.

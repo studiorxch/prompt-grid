@@ -1,0 +1,1 @@
+{"compilerOptions":{"module":"ESNext","target":"ES2022","noImplicitAny":true,"strict":true,"noUnusedLocals":true,"moduleResolution":"Bundler","esModuleInterop":true,"lib":["DOM","ES2022"],"types":["node","vitest/globals"]},"include":["src/**/*.ts","tests/**/*.ts"]}
