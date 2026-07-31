@@ -1,0 +1,12 @@
+import {describe,expect,it} from "vitest";
+import {readFileSync,readdirSync} from "node:fs";
+import {basename,join} from "node:path";
+import {parseRawPrompt} from "../src/logic/importParser";
+import {serializeCanonicalMarkdown} from "../src/logic/canonicalMarkdownSerializer";
+import {parseCanonicalMarkdown} from "../src/logic/canonicalMarkdownParser";
+import {serializeSunoPrompt} from "../src/logic/sunoSerializer";
+import {createSequentialIdFactory} from "../src/utilities/identifiers";
+import {titleFromName} from "../src/utilities/fileNaming";
+const root=join(import.meta.dirname,"..");
+const raws=readdirSync(join(root,"fixtures/raw")).sort();
+describe("all authoritative fixture pairs",()=>{for(const [index,name] of raws.entries()){it(`${name} exactly matches canonical and Suno output`,()=>{const raw=readFileSync(join(root,"fixtures/raw",name),"utf8");const title=titleFromName(name);const document=parseRawPrompt(raw,{title,idFactory:createSequentialIdFactory(index+1),now:"2026-07-30T00:00:00Z"});const canonical=serializeCanonicalMarkdown(document);const canonicalName=name.replace("raw:","expected-canonical:");const sunoName=name.replace("raw:","expected-suno:");expect(canonical).toBe(readFileSync(join(root,"fixtures/expected-canonical",canonicalName),"utf8"));expect(serializeSunoPrompt(document).output).toBe(readFileSync(join(root,"fixtures/expected-suno",sunoName),"utf8"));const reparsed=parseCanonicalMarkdown(canonical);expect(serializeCanonicalMarkdown(reparsed)).toBe(canonical);expect(serializeSunoPrompt(reparsed).output).toBe(readFileSync(join(root,"fixtures/expected-suno",sunoName),"utf8"));expect(basename(name)).toContain(String(index+1).padStart(2,"0"));});}});
