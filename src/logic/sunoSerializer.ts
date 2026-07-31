@@ -1,0 +1,4 @@
+import type {PromptDocument,SunoExportResult} from "../data/promptTypes";
+import {validatePrompt} from "./promptValidator";
+export function serializeSunoStyle(d:PromptDocument):string { return d.styles.join(", "); }
+export function serializeSunoPrompt(d:PromptDocument,threshold=3000):SunoExportResult { const groups:string[][]=[];if(d.instrumental)groups.push(["[Instrumental]"]);const pre=d.preamble.filter(x=>x.enabled).map(x=>`[${x.text}]`);if(pre.length)groups.push(pre);for(const s of d.sections){const lines=s.lines.filter(x=>x.enabled).map(x=>`[${x.text}]`);groups.push([`[${s.label}]`,...lines]);}const output=groups.length?groups.map(g=>g.join("\n")).join("\n\n")+"\n":"";return {output,characterCount:output.length,warnings:validatePrompt(d,threshold).filter(x=>x.severity==="warning")}; }

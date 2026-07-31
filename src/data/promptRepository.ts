@@ -1,0 +1,7 @@
+import type {App,TFile,Vault} from "obsidian";
+import type {PromptDocument} from "./promptTypes";
+import {serializeCanonicalMarkdown} from "../logic/canonicalMarkdownSerializer";
+import {serializeSunoPrompt} from "../logic/sunoSerializer";
+import {slugify} from "../utilities/fileNaming";
+export class PromptRepository { constructor(private readonly vault:Vault){} private async folder(path:string){const parts=path.split("/").filter(Boolean);let built="";for(const part of parts){built=built?`${built}/${part}`:part;if(!this.vault.getAbstractFileByPath(built))await this.vault.createFolder(built);}} private available(folder:string,name:string):string {let path=`${folder}/${name}.md`,n=2;while(this.vault.getAbstractFileByPath(path))path=`${folder}/${name}-${n++}.md`;return path;} async saveCanonical(document:PromptDocument,folder:string):Promise<TFile>{await this.folder(folder);return this.vault.create(this.available(folder,slugify(document.title)),serializeCanonicalMarkdown(document));} async exportSuno(document:PromptDocument,folder:string):Promise<{file:TFile;characterCount:number}>{await this.folder(folder);const result=serializeSunoPrompt(document);const file=await this.vault.create(this.available(folder,`${slugify(document.title)}-suno`),result.output);return {file,characterCount:result.characterCount};}}
+export async function openFile(app:App,file:TFile):Promise<void>{await app.workspace.getLeaf(false).openFile(file);}

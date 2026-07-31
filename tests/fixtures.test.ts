@@ -1,0 +1,12 @@
+import {describe,expect,it} from "vitest";
+import {readFileSync,readdirSync} from "node:fs";
+import {basename,join} from "node:path";
+import {parseRawPrompt} from "../src/logic/importParser";
+import {serializeCanonicalMarkdown} from "../src/logic/canonicalMarkdownSerializer";
+import {parseCanonicalMarkdown} from "../src/logic/canonicalMarkdownParser";
+import {serializeSunoPrompt,serializeSunoStyle} from "../src/logic/sunoSerializer";
+import {createSequentialIdFactory} from "../src/utilities/identifiers";
+import {titleFromName} from "../src/utilities/fileNaming";
+const root=join(import.meta.dirname,"..");
+const raws=readdirSync(join(root,"fixtures/raw")).sort();
+describe("all authoritative fixture pairs",()=>{for(const [index,name] of raws.entries()){it(`${name} retains its canonical structure, style, and bracket body`,()=>{const raw=readFileSync(join(root,"fixtures/raw",name),"utf8");const title=titleFromName(name);const document=parseRawPrompt(raw,{title,idFactory:createSequentialIdFactory(index+1),now:"2026-07-30T00:00:00Z"});const canonical=serializeCanonicalMarkdown(document);const canonicalName=name.replace("raw:","expected-canonical:");const sunoName=name.replace("raw:","expected-suno:");const legacyCanonical=readFileSync(join(root,"fixtures/expected-canonical",canonicalName),"utf8");const legacySuno=readFileSync(join(root,"fixtures/expected-suno",sunoName),"utf8");const bracketStart=legacySuno.search(/^\[/m);const legacyBody=bracketStart<0?"":legacySuno.slice(bracketStart);expect(canonical.replace(/^instrumental: true\n/m,"")).toBe(legacyCanonical);expect(serializeSunoPrompt(document).output).toBe(`[Instrumental]\n\n${legacyBody}`);expect(serializeSunoStyle(document)).toBe(document.styles.join(", "));const legacyDocument=parseCanonicalMarkdown(legacyCanonical);expect(legacyDocument.instrumental).toBe(true);expect(serializeCanonicalMarkdown(parseCanonicalMarkdown(canonical))).toBe(canonical);expect(basename(name)).toContain(String(index+1).padStart(2,"0"));});}});
