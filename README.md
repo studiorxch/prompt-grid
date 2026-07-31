@@ -1,5 +1,7 @@
 # Prompt Grid Handoff Package
 
+**Current plugin version:** 0.1.1
+
 This package defines a two-stage Obsidian plugin build for composing and exporting StudioRich music prompts.
 
 ## Build Order
@@ -34,3 +36,15 @@ PROMPTGRID-HANDOFF/
 ## First Assignment
 
 Build Spec 1 only. Run automated tests against all fixture pairs. The implementation is incomplete until each raw fixture produces its matching canonical and Suno output.
+
+## Spec 1.1 Export Behavior
+
+Prompt Grid keeps Suno's **Style** and **Prompt** fields separate:
+
+- **Prompt Grid: Copy Style for Suno** copies styles as plain comma-separated text, without brackets or a `Styles:` prefix.
+- **Prompt Grid: Copy current note for Suno** copies only the structured bracketed prompt body. Style, BPM, and key metadata are excluded.
+- **Prompt Grid: Export current note for Suno** writes that same structured bracketed prompt body to the configured Exports folder.
+
+New imports use the **Prepend [Instrumental] on prompt export** setting, which defaults on. Canonical notes store the choice as `instrumental: true` or `instrumental: false`; this per-note value overrides the setting. Existing canonical notes without the field use the current setting and remain readable.
+
+Spec 1.1 does not add the Visual Composer, a custom view, drag-and-drop, or card UI.
