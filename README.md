@@ -1,6 +1,6 @@
 # Prompt Grid Handoff Package
 
-**Current plugin version:** 0.2.0
+**Current plugin version:** 0.2.1
 
 This package defines a two-stage Obsidian plugin build for composing and exporting StudioRich music prompts.
 
@@ -58,3 +58,7 @@ Open a canonical Prompt Grid note and run **Prompt Grid: Open Visual Composer**.
 - Copy the separate Suno Style and structured Prompt outputs from the toolbar.
 - Every confirmed change is immediately serialized to the open canonical Markdown note; no secondary database is created.
 - Changing the active note or modifying its Markdown externally refreshes the composer.
+
+### Compact interaction model
+
+Sections and cards use a dense Kanban-style layout. Drag from the `⠿` handle to reorder sections or move cards. Section rename/movement/deletion and card movement/enablement/deletion live in keyboard-accessible `…` menus. Double-click card text, or focus it and press Enter, to open multiline editing; use Ctrl/Cmd+Enter to commit or Escape to cancel.
