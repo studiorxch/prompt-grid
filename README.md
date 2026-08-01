@@ -1,6 +1,6 @@
 # Prompt Grid Handoff Package
 
-**Current plugin version:** 0.2.6
+**Current plugin version:** 0.2.7
 
 This package defines a two-stage Obsidian plugin build for composing and exporting StudioRich music prompts.
 
@@ -70,3 +70,5 @@ Version 0.2.3 removes the persistent metadata form: title, Style, BPM, key, and 
 Version 0.2.5 presents sections as open text stacks without panel outlines or card counts. Cards contain only prompt text; drag the card body to reorder or move it, double-click to edit, and use the native context menu for the uncommon Enable/Disable and Delete actions. Section rare actions remain in a low-contrast menu that appears on header hover or keyboard focus. Each expanded column ends with a centered, borderless `+` insertion control.
 
 Version 0.2.6 restores plain inline title and Style editing in the compact header: click either value or focus it and press Enter, then blur or use Ctrl/Cmd+Enter to commit and Escape to cancel. Section/card/Preamble text entry and destructive confirmations use native Obsidian modals instead of unsupported browser dialogs. Section headers are draggable without visible grab dots, and collapse uses a minimal keyboard-accessible chevron.
+
+Version 0.2.7 makes cards quiet text blocks until hover, focus, editing, selection, or dragging; gives section labels a restrained structural tone; presents Preamble as a wider, shaded, independently collapsible drawer; and prevents true YAML front-matter delimiters from appearing as editable cards while preserving canonical Markdown round trips.

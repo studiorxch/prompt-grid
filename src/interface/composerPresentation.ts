@@ -2,6 +2,7 @@ import type {PromptDocument,PromptLine} from "../data/promptTypes";
 import type {LineContainerId} from "../logic/promptEditor";
 
 export const shouldRenderPreamble=(lineCount:number):boolean=>lineCount>0;
+export const columnPresentationClass=(isPreamble:boolean,collapsed:boolean):string=>["prompt-grid-column",isPreamble?"is-preamble":"",collapsed?"is-collapsed":""].filter(Boolean).join(" ");
 export const restoreCollapsedColumns=(value:unknown):Set<string>=>new Set(Array.isArray(value)?value.filter((item):item is string=>typeof item==="string"):[]);
 export const storeCollapsedColumns=(value:Set<string>):string[]=>[...value].sort();
 export const documentChanged=(before:PromptDocument,after:PromptDocument):boolean=>JSON.stringify(before)!==JSON.stringify(after);
