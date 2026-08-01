@@ -1,0 +1,16 @@
+export interface FloatingMenuItem {label:string;action:()=>void|Promise<void>;checked?:boolean;danger?:boolean}
+export interface PopoverPoint {left:number;top:number}
+
+export function placeFloatingMenu(trigger:Pick<DOMRect,"left"|"right"|"top"|"bottom">,width:number,height:number,viewportWidth:number,viewportHeight:number,margin=8,gap=4):PopoverPoint {const left=Math.max(margin,Math.min(trigger.right-width,viewportWidth-width-margin));const below=trigger.bottom+gap,top=below+height<=viewportHeight-margin?below:Math.max(margin,trigger.top-gap-height);return {left,top};}
+
+export class FloatingMenuState {activeId:string|null=null;open(id:string):void{this.activeId=id;}close():void{this.activeId=null;}handleKey(key:string):boolean{if(key!=="Escape"||this.activeId===null)return false;this.close();return true;}}
+
+export class FloatingMenuController {
+ readonly state=new FloatingMenuState();private menu:HTMLElement|null=null;private trigger:HTMLButtonElement|null=null;
+ open(trigger:HTMLButtonElement,id:string,items:FloatingMenuItem[]):void {if(this.state.activeId===id){this.close();return;}this.close();this.state.open(id);this.trigger=trigger;trigger.setAttribute("aria-expanded","true");trigger.setAttribute("aria-haspopup","menu");const menu=document.body.createDiv({cls:"prompt-grid-floating-menu",attr:{role:"menu","aria-label":"Actions"}});this.menu=menu;for(const item of items){const button=menu.createEl("button",{cls:item.danger?"is-danger":"",attr:{role:item.checked===undefined?"menuitem":"menuitemcheckbox",...(item.checked===undefined?{}:{"aria-checked":String(item.checked)})}});if(item.checked!==undefined)button.createSpan({text:item.checked?"✓":"",cls:"prompt-grid-menu-check"});button.createSpan({text:item.label});button.addEventListener("click",()=>{this.close();void Promise.resolve(item.action()).catch(error=>console.error("Prompt Grid menu action",error));});}this.position();document.addEventListener("pointerdown",this.outside,true);document.addEventListener("keydown",this.keydown,true);window.addEventListener("resize",this.position);window.addEventListener("scroll",this.position,true);menu.querySelector<HTMLButtonElement>("button")?.focus();}
+ close=(restoreFocus=false):void=>{if(!this.menu&&!this.trigger)return;const trigger=this.trigger;this.menu?.remove();this.menu=null;this.trigger=null;this.state.close();trigger?.setAttribute("aria-expanded","false");document.removeEventListener("pointerdown",this.outside,true);document.removeEventListener("keydown",this.keydown,true);window.removeEventListener("resize",this.position);window.removeEventListener("scroll",this.position,true);if(restoreFocus)trigger?.focus();};
+ destroy():void{this.close();}
+ private position=():void=>{if(!this.menu||!this.trigger)return;const rect=this.trigger.getBoundingClientRect(),point=placeFloatingMenu(rect,this.menu.offsetWidth,this.menu.offsetHeight,window.innerWidth,window.innerHeight);this.menu.style.left=`${point.left}px`;this.menu.style.top=`${point.top}px`;};
+ private outside=(event:PointerEvent):void=>{const target=event.target as Node|null;if(target&&!this.menu?.contains(target)&&target!==this.trigger)this.close();};
+ private keydown=(event:KeyboardEvent):void=>{if(this.state.handleKey(event.key)){event.preventDefault();event.stopPropagation();this.close(true);}};
+}

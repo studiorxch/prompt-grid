@@ -5,6 +5,7 @@ export const shouldRenderPreamble=(lineCount:number):boolean=>lineCount>0;
 export const restoreCollapsedColumns=(value:unknown):Set<string>=>new Set(Array.isArray(value)?value.filter((item):item is string=>typeof item==="string"):[]);
 export const storeCollapsedColumns=(value:Set<string>):string[]=>[...value].sort();
 export const documentChanged=(before:PromptDocument,after:PromptDocument):boolean=>JSON.stringify(before)!==JSON.stringify(after);
+export const instrumentalMenuChecked=(document:PromptDocument):boolean=>document.instrumental;
 export const resolveCardEdit=(original:string,draft:string,commit:boolean):string|null=>{if(!commit)return null;const text=draft.trim();return text&&text!==original?text:null;};
 
 function containerLines(document:PromptDocument,id:LineContainerId):PromptLine[]|null {if(id==="preamble")return document.preamble;return document.sections.find(section=>section.id===id)?.lines??null;}
