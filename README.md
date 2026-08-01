@@ -1,6 +1,6 @@
 # Prompt Grid Handoff Package
 
-**Current plugin version:** 0.2.2
+**Current plugin version:** 0.2.3
 
 This package defines a two-stage Obsidian plugin build for composing and exporting StudioRich music prompts.
 
@@ -51,7 +51,7 @@ Spec 1.1 does not add the Visual Composer, a custom view, drag-and-drop, or card
 
 ## Visual Composer
 
-Open a canonical Prompt Grid note and run **Prompt Grid: Open Visual Composer**. The native Obsidian view provides editable title, Style, BPM, key, and instrumental metadata above a horizontally scrolling grid. Preamble appears as the first column when it contains cards, and each prompt section appears as a separate column.
+Open a canonical Prompt Grid note and run **Prompt Grid: Open Visual Composer**. The native Obsidian view places a compact document header above a horizontally scrolling grid; metadata editing is available from the board menu without a persistent form. Preamble appears as the first column when it contains cards, and each prompt section appears as a separate column.
 
 - Add, rename, move, drag, or delete sections.
 - Add, edit, enable/disable, move, drag between sections, or delete prompt cards.
@@ -64,3 +64,5 @@ Open a canonical Prompt Grid note and run **Prompt Grid: Open Visual Composer**.
 Sections and cards use a dense Kanban-style layout. Drag sections from the muted `⠿` header handle and drag cards from their body. Section rename/movement/deletion and card movement/enablement/deletion live in keyboard-accessible `…` menus. Double-click card text, or focus it and press Enter, to open multiline editing; use Ctrl/Cmd+Enter to commit or Escape to cancel.
 
 In version 0.2.2, cards are draggable from their body and show exact insertion positions while moving; text selection, editing, and overflow menus do not start drags. Empty Preamble is hidden until **Add preamble** is selected from the board menu. Columns can be collapsed individually or through **Collapse all**/**Expand all**, with collapse state stored only in the Obsidian workspace. Card editing stays in the card text region, commits on blur or Ctrl/Cmd+Enter, and cancels with Escape.
+
+Version 0.2.3 removes the persistent metadata form: title, Style, BPM, key, and Instrumental are edited from the board `…` menu, while the compact header shows only the document title, character count, copy actions, section action, and menu. Card, section, and board menus now use one accessible body-level floating menu that closes on Escape or outside interaction, replaces any previously open menu, and flips above its trigger when needed so board and column overflow cannot clip it.
